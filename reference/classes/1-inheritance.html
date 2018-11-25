@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prototypal Inheritance</title>
+</head>
+<body>
+  <script>
+    
+    function Car(model, make) {
+      this.model = model;
+      this.make = make;
+    }
+    
+    Car.prototype.drive = function() {
+      console.log(`Vroom vroom 🚗 🚗 🚗! I'm a ${this.model} and I'm a ${this.make}`);
+    };
+    
+    Car.prototype.stop = function() {
+      console.log(`Screech! 🚒 🚑 🚓`);
+    };
+    
+    const expo = new Car('Expo', 'Ford');
+    const miata = new Car('Miata', 'Mazda');
+    
+  </script>
+</body>
+</html>
