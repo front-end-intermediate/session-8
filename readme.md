@@ -1,4 +1,4 @@
-# VII - React Intro
+# VIII - React Intro Continued
 
 ## Homework
 
@@ -1034,6 +1034,8 @@ class AddPirateForm extends Component {
 
 export default AddPirateForm;
 ```
+
+## HERE
 
 And test using the form interface.
 
