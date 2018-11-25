@@ -5,8 +5,9 @@ class PirateForm extends Component {
   render(){
     return (
       <div>
-      <h3>Pirate Form Component</h3>
-      <AddPirateForm />
+      <h3>{this.props.tagline}</h3>
+      <AddPirateForm addPirate={this.props.addPirate} />
+      <button onClick={this.props.loadSamples}>Load Sample Pirates</button>
       </div>
       )
   }

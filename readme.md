@@ -1035,21 +1035,21 @@ class AddPirateForm extends Component {
 export default AddPirateForm;
 ```
 
-## HERE
-
 And test using the form interface.
+
+## HERE
 
 Add [refs](https://facebook.github.io/react/docs/refs-and-the-dom.html) to the form to store references to the input:
 
 ```js
-    return (
-      <form onSubmit={ (e) => this.createPirate(e) }>
-        <input ref={ (input) => this.name = input } type="text" placeholder="Pirate name" />
-        <input ref={ (input) => this.vessel = input } type="text" placeholder="Pirate vessel" />
-        <input ref={ (input) => this.weapon = input } type="text" placeholder="Pirate weapon" />
-        <button type="submit">Add Pirate</button>
-      </form>
-    )
+return (
+  <form onSubmit={ (e) => this.createPirate(e) }>
+    <input ref={ (input) => this.name = input } type="text" placeholder="Pirate name" />
+    <input ref={ (input) => this.vessel = input } type="text" placeholder="Pirate vessel" />
+    <input ref={ (input) => this.weapon = input } type="text" placeholder="Pirate weapon" />
+    <button type="submit">Add Pirate</button>
+  </form>
+)
 ```
 
 Go to the React dev tools, find the `AddPirateForm` component, `$r` in the console to see the inputs.
@@ -1175,6 +1175,27 @@ Unlike the `createPirate` function, it stores the new pirate in `state`. Test wi
 
 ### Passing Props
 
+`App.js`:
+
+```js
+<PirateForm tagline="Ahoy Pirate Form" childTagline="Ahoy Add Pirate Form" />
+```
+
+`PirateForm.js`:
+
+```js
+<h3>{this.props.tagline}</h3>
+<AddPirateForm tagline={this.props.childTagline} />
+```
+
+`AddPirateForm.js`:
+
+```js
+<h3>{this.props.tagline}</h3>
+```
+
+### Passing a Function via props
+
 We need to make the `addPirate` function available to the `AddPirateForm` by passing it using props:
 
 `App.js > PirateForm > AddPirateForm`
@@ -1250,14 +1271,14 @@ Empty the form by assigning a [ref](https://facebook.github.io/react/docs/refs-a
 `<form ref={ (input)=>this.pirateForm = input } onSubmit={(e) => this.createPirate(e)}>`:
 
 ```js
-    return (
-      <form ref={ (input)=>this.pirateForm = input } onSubmit={ (e) => this.createPirate(e) }>
-        <input ref={ (input) => this.name = input } type="text" placeholder="Pirate name" />
-        <input ref={ (input) => this.vessel = input } type="text" placeholder="Pirate vessel" />
-        <input ref={ (input) => this.weapon = input } type="text" placeholder="Pirate weapon" />
-        <button type="submit">Add Pirate</button>
-      </form>
-      )
+return (
+  <form ref={ (input)=>this.pirateForm = input } onSubmit={ (e) => this.createPirate(e) }>
+    <input ref={ (input) => this.name = input } type="text" placeholder="Pirate name" />
+    <input ref={ (input) => this.vessel = input } type="text" placeholder="Pirate vessel" />
+    <input ref={ (input) => this.weapon = input } type="text" placeholder="Pirate weapon" />
+    <button type="submit">Add Pirate</button>
+  </form>
+  )
 ```
 
 and `this.pirateForm.reset();`:
@@ -1295,21 +1316,21 @@ We can add pirates to state but cannot see them in the UI. Let's create an unord
       )
 ```
 
-## Sample Pirates
+## Review .map with Sample Pirates
 
-Using a JSON Array in `Pirate.js`.
+We will use a JSON Array in `Pirate.js` and [JSON stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) to get a quick look at some pirates.
 
 Examine the sample files in the `data` folder. Ensure that the data folder is inside `src`.
 
-We will use [JSON stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) to get a quick look at our pirates.
-
-`JSON.stringify(<data-that-you-want-to-stringify>,<replacer-function-null>,<indentation>)`
-
 * `Pirate.js`:
 
-`import piratesFile from '../data/sample-pirates-array';`:
+```js
+import piratesFile from '../data/sample-pirates-array';`:
+...
+<pre><code>{ JSON.stringify(piratesFile, null, 4)}</code></pre>
+```
 
-`<pre><code>{ JSON.stringify(piratesFile, null, 4)}</code></pre>`:
+`JSON.stringify(<data-that-you-want-to-stringify>,<replacer-function-null>,<indentation>)`
 
 ```jsx
 import React, { Component } from 'react';
@@ -1349,18 +1370,18 @@ Review Example - Doubling numbers:
 * `Pirate.js`:
 
 ```js
-      <ul>
-      {piratesFile.pirates.map(function(pirate){
-        return (
-          <li>
-          <h4>{pirate.name}</h4>
-          </li>
-        )
-      })}
-      </ul>
+<ul>
+{piratesFile.pirates.map(function(pirate){
+  return (
+    <li>
+    <h4>{pirate.name}</h4>
+    </li>
+  )
+})}
+</ul>
 ```
 
-Rollback the Pirate component to its original state.
+Review over, rollback the Pirate component to its original state:
 
 * `Pirate`:
 
@@ -1381,19 +1402,9 @@ class Pirate extends React.Component {
 export default Pirate;
 ```
 
-This time we will import the data into `App.js` as an object. Switch the array out for the object version of the pirate samples.
-
-`App.js`:
-
-```js
-import piratesFile from './data/sample-pirates-object';
-```
-
-(Check for errors - might need to recompile by stopping and starting npm.)
-
 ### Object.keys()
 
-For this version of sample-pirates we cannot directly use `.map` which is a method on the Array prototype - not the Object prototype.
+We cannot directly use `.map` which is a method on the Array prototype - not the Object prototype.
 
 Use `Object.keys()` (a private method on the Object) instead. See the [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys) article on Object keys.
 
@@ -1497,9 +1508,13 @@ Test again using the form.
 
 ### Load sample data via PirateForm
 
-Recall we imported the pirates data in `App.js`:
+We will import the data into `App.js` as an object. Switch the array out for the object version of the pirate samples.
 
-`import piratesFile from './data/sample-pirates-object'`
+`App.js`:
+
+```js
+import piratesFile from './data/sample-pirates-object';
+```
 
 Create a new method in `App.js`:
 
@@ -1546,7 +1561,9 @@ Add `loadSamples={this.loadSamples}` to props.
 
 * `App.js`:
 
-`<PirateForm addPirate={this.addPirate} loadSamples={this.loadSamples} />`:
+```js
+<PirateForm addPirate={this.addPirate} loadSamples={this.loadSamples} />
+```
 
 ```js
 render() {
