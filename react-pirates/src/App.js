@@ -10,7 +10,8 @@ class App extends Component {
   constructor() {
     super();
     this.addPirate = this.addPirate.bind(this);
-    this.loadSamples = this.loadSamples.bind(this)
+    this.loadSamples = this.loadSamples.bind(this);
+    this.removePirate = this.removePirate.bind(this);
     this.state = {
       pirates: {}
     }
@@ -22,33 +23,43 @@ class App extends Component {
       <Header />
       <ul>
       {
-        Object.keys(this.state.pirates)
-        .map( key => <Pirate key={key} details={this.state.pirates[key]} /> )
+        Object
+        .keys(this.state.pirates)
+        .map( key => <Pirate key={key}
+          index={key}
+          details={this.state.pirates[key]}
+          removePirate={this.removePirate} /> )
+        }
+        </ul>
+        <PirateForm addPirate={this.addPirate} loadSamples={this.loadSamples} />
+        </div>
+        );
       }
-      </ul>
-      <PirateForm addPirate={this.addPirate} loadSamples={this.loadSamples} />
-      </div>
-      );
+      
+      loadSamples(){
+        this.setState({
+          pirates: piratesFile
+        })
+      }
+      
+      removePirate(key){
+        const pirates = {...this.state.pirates}
+        delete pirates[key]
+        this.setState({pirates})
+      }
+      
+      addPirate(pirate) {
+        //take a copy of the current state and put it into pirates var
+        const pirates = {...this.state.pirates}
+        //create a unique id
+        const timestamp = Date.now()
+        //add new pirate using accessor and id - objectName["propertyName"] and assignment
+        pirates[`pirate-${timestamp}`] = pirate
+        //set state pirates with var pirates
+        this.setState({ pirates: pirates })
+      }
+      
     }
     
-    loadSamples(){
-      this.setState({
-        pirates: piratesFile
-      })
-    }
+    export default App;
     
-    addPirate(pirate) {
-      //take a copy of the current state and put it into pirates var
-      const pirates = {...this.state.pirates}
-      //create a unique id
-      const timestamp = Date.now()
-      //add new pirate using accessor and id - objectName["propertyName"] and assignment
-      pirates[`pirate-${timestamp}`] = pirate
-      //set state pirates with var pirates
-      this.setState({ pirates: pirates })
-    }
-    
-  }
-  
-  export default App;
-  
