@@ -509,14 +509,14 @@ Bind the add form to our app in `App.js`:
 
 The binding step is necessary because class methods don’t automatically bind `this` to the class instance. 
 
-In other words, React does not implicitly bind the methods to the component itself - you need to bind them. Inside the constructor `this` is bound to the app component.
+In other words, React does not implicitly bind the methods to the component itself - you need to bind them. Inside the constructor `this` is bound to the app component. This is one of the main sources of bugs developers encounter in React.
 
 ### Review
 
 * `super()` extends the app component. (see `super` in classes: `reference / extending-classes.html`)
-* `bind()` - creates a new function that, when called, has its `this` keyword set to the provided value
+* `bind()` creates a new function that, when called, has its `this` keyword set to the provided value
 
-See: `reference / bind / index.html` and `reference / bind / button.html`
+See `reference / bind / index.html` and `reference / bind / button.html`.
 
 ## State continued
 
@@ -892,6 +892,23 @@ class Pirate extends Component {
 export default Pirate;
 ```
 
+Note that `const { details } = this.props;` is an example of [ES6 destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment).
+
+For example:
+
+```js
+const user = { firstname: 'Daniel', lastname: 'Deverell',
+};
+
+// ES5
+var firstname = user.firstname; var lastname = user.lastname;
+console.log(firstname + ' ' + lastname); // output: Daniel Deverell
+
+// ES6
+const { firstname, lastname } = user; console.log(firstname + ' ' + lastname);
+// output: Daniel Deverell
+```
+
 Test again using the form.
 
 ### Load sample data via PirateForm
@@ -1048,6 +1065,14 @@ return (
   </div>
   )
 ```
+
+Note: `<button onclick=` would be the native HTML event. In React events are camel case: `<button onClick=`.
+
+`removePirate` is a function that is passed to the event handler. The following code wouldn’t work, because the class method would be executed immediately when you open the application in the browser:
+
+`onClick={this.props.removePirate('pirate1')}`
+
+Newcomers to React often have difficulty using functions in event handlers, so don’t get discouraged if you have trouble on the first pass.
 
 We have _temporarily_ hard coded the button to remove just one pirate from the list.
 
