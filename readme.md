@@ -491,7 +491,9 @@ And add a method to `App.js` using the date method to create a unique identifier
   }
 ```
 
-(For spread operator see: `reference / spread-operator.html`.)
+Be careful not to mutate the state directly. Instead, you should use a method called setState() to modify your states.
+
+(For the spread operator see: `reference / spread-operator.html`.)
 
 Bind the add form to our app in `App.js`:
 
@@ -1510,3 +1512,5 @@ if (module.hot) {
   module.hot.accept();
 }
 ```
+
+Classes in JS: `https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Constructor`
