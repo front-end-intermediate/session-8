@@ -16,6 +16,12 @@ class App extends Component {
       pirates: {}
     }
   }
+
+  componentWillMount(){
+    fetch('http://localhost:3005/api/pirates')
+    .then(response => response.json())
+    .then(pirates => this.setState({pirates}))
+  }
   
   render() {
     return (
