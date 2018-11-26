@@ -4,9 +4,9 @@
 
 Review the notes below, step through them again using them and the finished version as a guide. Finish the form that sends a pirate to the back end, updates the database and displays the new pirate in the front end.
 
-For your final project you will create a version of the recipes list and details pages in React.
+<!-- For your final project you will create a version of the recipes list and details pages in React.
 
-Of course, if you wish you can do something entirely original. Just propose it.
+Of course, if you wish you can do something entirely original. Just propose it. -->
 
 ## Reading
 
