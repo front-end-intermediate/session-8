@@ -2,7 +2,7 @@
 
 ## Homework
 
-Review the notes below, step through them again using them and the finished version as a guide. Create an HTML table for the display of pirates by editing the Pirate component's JSX.
+Review the notes below, step through them again using them and the finished version as a guide. Finish the form that sends a pirate to the back end, updates the database and displays the new pirate in the front end.
 
 For your final project you will create a version of the recipes list and details pages in React.
 
@@ -1717,6 +1717,32 @@ $ npm i
 $ npm i -S nodemon mongoose
 ```
 
+VSCode settings (for clarity).
+
+Back end:
+
+```js
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#FF2C70",
+    "titleBar.inactiveBackground": "#FF2C70CC"
+  }
+}
+```
+
+Front end:
+
+```js
+{
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#000",
+    "titleBar.inactiveForeground": "#000000CC",
+    "titleBar.activeBackground": "#FFC600",
+    "titleBar.inactiveBackground": "#FFC600CC"
+  }
+}
+```
+
 Create a dot gitignore, set the PORT to 3005, the npm script to use nodemon and edit `app.js` to:
 
 ```js
@@ -1867,12 +1893,6 @@ app.get('/api/import', (req, res) => {
 `App.js`:
 
 ```js
-  //   this.state = {
-  //     pirates: {},
-  //     // data: null
-  //   }
-  // }
-
   componentWillMount(){
     fetch('http://localhost:3005/api/pirates')
     .then(response => response.json())
@@ -1934,74 +1954,94 @@ app.use(cors());
 
 ## Loading
 
+The loading state should be used to indicated that an asynchronous request is happening. Set an `isLoading` property in the constructor:
+
 ```js
-    this.state = {
-      pirates: {},
-      isLoading: false
-    }
+  this.state = {
+    pirates: {},
+    isLoading: true
   }
-
-  componentDidMount(){
-    this.setState({ isLoading: true });
-    fetch('http://localhost:3005/api/pirates')
-    .then(response => response.json())
-    .then(pirates => this.setState({pirates, isLoading: false}))
-  }
-  
-  render() {
-    // console.log(this.state.data)
-    const { pirates, isLoading } = this.state;
-
-    if (isLoading) {
-      return <p>Loading ...</p>;
-    }
+}
 ```
 
-Chrome dev tools > network > Online > Slow 3G
+Turn it off once the data is loaded:
+
+```js
+componentDidMount(){
+  this.setState({ isLoading: true });
+  fetch('http://localhost:3005/api/pirates')
+  .then(response => response.json())
+  .then(pirates => this.setState({pirates, isLoading: false}))
+}
+```
+
+In your render() method you can use React’s conditional rendering to display either a loading indicator or the resolved data.
+
+```js
+render() {
+
+  const { isLoading } = this.state;
+
+  if (isLoading) {
+    return <p>Loading ...</p>;
+  }
+```
+
+Test the loading by going to Chrome dev tools > Network > Online and set it to Slow 3G. 
+
+As an exercise you could try implementing a [React Content Loader](https://github.com/danilowoz/react-content-loader).
 
 ## Error Handling
 
+The second state that you could keep in your local state would be an error state. Create a new entry in state:
+
 ```js
-    this.state = {
-      pirates: {},
-      isLoading: false,
-      error: null
-    }
+  this.state = {
+    pirates: {},
+    isLoading: false,
+    error: null
   }
-
-  componentDidMount(){
-    this.setState({ isLoading: true });
-    fetch('http://localhost:3005/api/pirates')
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Something went wrong ...');
-      }
-    })
-    // .then(response => response.json())
-    .then(pirates => this.setState({pirates, isLoading: false}))
-    .catch(error => this.setState({ error, isLoading: false }));
-  }
-  
-  render() {
-    // console.log(this.state.data)
-    const { isLoading, error } = this.state;
-
-    if (error) {
-      return <p>{error.message}</p>;
-    }
-
-    if (isLoading) {
-      return <p>Loading ...</p>;
-    }
+}
 ```
+
+Add error handling to the initialization and a new render method to support it:
+
+```js
+componentDidMount(){
+  this.setState({ isLoading: true });
+  fetch('http://localhost:3005/api/pirates')
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error('Something went wrong ...');
+    }
+  })
+  .then(pirates => this.setState({pirates, isLoading: false}))
+  .catch(error => this.setState({ error, isLoading: false }));
+}
+
+render() {
+  const { isLoading, error } = this.state;
+
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+
+  if (isLoading) {
+    return <p>Loading ...</p>;
+  }
+```
+
+Try to induce an error by changing the connection string to the back end.
 
 ## Axios
 
-You can substitute the native fetch API with another library. For instance, another library might run for every erroneous requests into the catch block on its own without you having to throw an error in the first place. A great candidate as a library for fetching data is axios. 
+You can substitute the native fetch API with another library. A commonly used library for fetching data is axios. 
 
-Install axios in your project with `npm install axios -S` and use it instead of the native fetch API in your project. Let’s refactor using axios instead of the fetch API.
+Install axios in your project with `npm install axios -S` and use it instead of the native fetch API in your project. 
+
+Refactor using axios instead of the fetch API:
 
 ```js
 import axios from 'axios';
@@ -2018,6 +2058,62 @@ import axios from 'axios';
       isLoading: false
     }));
   }
+```
+
+## Removing Pirates
+
+Currently our `removePirate` function removes pirates from state but has no effect on the database.
+
+Let's use axios and a get query to delete a pirate.
+
+```js
+removePirate(key){
+  const pirates = {...this.state.pirates}
+  console.log(key)
+  console.log(this.state.pirates[key]._id)
+  let pirateDel = this.state.pirates[key]._id;
+  axios.get(`http://localhost:3005/api/pirates/${pirateDel}`)
+  .then(delete pirates[key])
+  .then(this.setState({pirates}))
+}
+```
+
+Create a corresponding end point in express for deleting a pirate.
+
+```js
+app.get('/api/pirates/:id', function(req, res){
+  let id = req.params.id;
+  Pirate.deleteOne({ _id: id}, result => {
+    return res.sendStatus(200)
+  })
+})
+```
+
+## Adding Pirates
+
+Here is some starter code. It is up to you to debug and get the pirate successfully showing in the front end.
+
+`App.js`:
+
+```js
+addPirate(pirate) {
+  console.log(pirate)
+  const pirates = {...this.state.pirates}
+  axios.post('http://localhost:3005/api/pirates/', {pirate})
+  .then(response => response.data)
+  .then(this.setState({ pirates: pirates }))
+}
+```
+
+Express:
+
+```js
+app.post('/api/pirates', function(req, res){
+  Pirate.create( req.body, (err, pirate) => {
+    if (err) return console.log(err);
+    return res.send(pirate)
+  })
+})
 ```
 
 ## Notes
