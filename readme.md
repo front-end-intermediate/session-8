@@ -1035,21 +1035,21 @@ class AddPirateForm extends Component {
 export default AddPirateForm;
 ```
 
-## HERE
-
 And test using the form interface.
+
+## HERE
 
 Add [refs](https://facebook.github.io/react/docs/refs-and-the-dom.html) to the form to store references to the input:
 
 ```js
-    return (
-      <form onSubmit={ (e) => this.createPirate(e) }>
-        <input ref={ (input) => this.name = input } type="text" placeholder="Pirate name" />
-        <input ref={ (input) => this.vessel = input } type="text" placeholder="Pirate vessel" />
-        <input ref={ (input) => this.weapon = input } type="text" placeholder="Pirate weapon" />
-        <button type="submit">Add Pirate</button>
-      </form>
-    )
+return (
+  <form onSubmit={ (e) => this.createPirate(e) }>
+    <input ref={ (input) => this.name = input } type="text" placeholder="Pirate name" />
+    <input ref={ (input) => this.vessel = input } type="text" placeholder="Pirate vessel" />
+    <input ref={ (input) => this.weapon = input } type="text" placeholder="Pirate weapon" />
+    <button type="submit">Add Pirate</button>
+  </form>
+)
 ```
 
 Go to the React dev tools, find the `AddPirateForm` component, `$r` in the console to see the inputs.
@@ -1175,6 +1175,27 @@ Unlike the `createPirate` function, it stores the new pirate in `state`. Test wi
 
 ### Passing Props
 
+`App.js`:
+
+```js
+<PirateForm tagline="Ahoy Pirate Form" childTagline="Ahoy Add Pirate Form" />
+```
+
+`PirateForm.js`:
+
+```js
+<h3>{this.props.tagline}</h3>
+<AddPirateForm tagline={this.props.childTagline} />
+```
+
+`AddPirateForm.js`:
+
+```js
+<h3>{this.props.tagline}</h3>
+```
+
+### Passing a Function via props
+
 We need to make the `addPirate` function available to the `AddPirateForm` by passing it using props:
 
 `App.js > PirateForm > AddPirateForm`
@@ -1250,14 +1271,14 @@ Empty the form by assigning a [ref](https://facebook.github.io/react/docs/refs-a
 `<form ref={ (input)=>this.pirateForm = input } onSubmit={(e) => this.createPirate(e)}>`:
 
 ```js
-    return (
-      <form ref={ (input)=>this.pirateForm = input } onSubmit={ (e) => this.createPirate(e) }>
-        <input ref={ (input) => this.name = input } type="text" placeholder="Pirate name" />
-        <input ref={ (input) => this.vessel = input } type="text" placeholder="Pirate vessel" />
-        <input ref={ (input) => this.weapon = input } type="text" placeholder="Pirate weapon" />
-        <button type="submit">Add Pirate</button>
-      </form>
-      )
+return (
+  <form ref={ (input)=>this.pirateForm = input } onSubmit={ (e) => this.createPirate(e) }>
+    <input ref={ (input) => this.name = input } type="text" placeholder="Pirate name" />
+    <input ref={ (input) => this.vessel = input } type="text" placeholder="Pirate vessel" />
+    <input ref={ (input) => this.weapon = input } type="text" placeholder="Pirate weapon" />
+    <button type="submit">Add Pirate</button>
+  </form>
+  )
 ```
 
 and `this.pirateForm.reset();`:
@@ -1295,21 +1316,21 @@ We can add pirates to state but cannot see them in the UI. Let's create an unord
       )
 ```
 
-## Sample Pirates
+## Review .map with Sample Pirates
 
-Using a JSON Array in `Pirate.js`.
+We will use a JSON Array in `Pirate.js` and [JSON stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) to get a quick look at some pirates.
 
 Examine the sample files in the `data` folder. Ensure that the data folder is inside `src`.
 
-We will use [JSON stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) to get a quick look at our pirates.
-
-`JSON.stringify(<data-that-you-want-to-stringify>,<replacer-function-null>,<indentation>)`
-
 * `Pirate.js`:
 
-`import piratesFile from '../data/sample-pirates-array';`:
+```js
+import piratesFile from '../data/sample-pirates-array';`:
+...
+<pre><code>{ JSON.stringify(piratesFile, null, 4)}</code></pre>
+```
 
-`<pre><code>{ JSON.stringify(piratesFile, null, 4)}</code></pre>`:
+`JSON.stringify(<data-that-you-want-to-stringify>,<replacer-function-null>,<indentation>)`
 
 ```jsx
 import React, { Component } from 'react';
@@ -1349,18 +1370,18 @@ Review Example - Doubling numbers:
 * `Pirate.js`:
 
 ```js
-      <ul>
-      {piratesFile.pirates.map(function(pirate){
-        return (
-          <li>
-          <h4>{pirate.name}</h4>
-          </li>
-        )
-      })}
-      </ul>
+<ul>
+{piratesFile.pirates.map(function(pirate){
+  return (
+    <li>
+    <h4>{pirate.name}</h4>
+    </li>
+  )
+})}
+</ul>
 ```
 
-Rollback the Pirate component to its original state.
+Review over, rollback the Pirate component to its original state:
 
 * `Pirate`:
 
@@ -1381,19 +1402,9 @@ class Pirate extends React.Component {
 export default Pirate;
 ```
 
-This time we will import the data into `App.js` as an object. Switch the array out for the object version of the pirate samples.
-
-`App.js`:
-
-```js
-import piratesFile from './data/sample-pirates-object';
-```
-
-(Check for errors - might need to recompile by stopping and starting npm.)
-
 ### Object.keys()
 
-For this version of sample-pirates we cannot directly use `.map` which is a method on the Array prototype - not the Object prototype.
+We cannot directly use `.map` which is a method on the Array prototype - not the Object prototype.
 
 Use `Object.keys()` (a private method on the Object) instead. See the [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys) article on Object keys.
 
@@ -1497,9 +1508,13 @@ Test again using the form.
 
 ### Load sample data via PirateForm
 
-Recall we imported the pirates data in `App.js`:
+We will import the data into `App.js` as an object. Switch the array out for the object version of the pirate samples.
 
-`import piratesFile from './data/sample-pirates-object'`
+`App.js`:
+
+```js
+import piratesFile from './data/sample-pirates-object';
+```
 
 Create a new method in `App.js`:
 
@@ -1546,7 +1561,9 @@ Add `loadSamples={this.loadSamples}` to props.
 
 * `App.js`:
 
-`<PirateForm addPirate={this.addPirate} loadSamples={this.loadSamples} />`:
+```js
+<PirateForm addPirate={this.addPirate} loadSamples={this.loadSamples} />
+```
 
 ```js
 render() {
@@ -1638,7 +1655,7 @@ return (
     <li>{details.name}</li>
     <li>{details.weapon}</li>
     <li>{details.vessel}</li>
-    <li><button onClick={() => this.props.removePirate('pirate1')}>X</button></li>
+    <li><button onClick={() => this.props.removePirate('pirate1')}>✖︎</button></li>
   </ul>
   </div>
   )
@@ -1672,7 +1689,7 @@ Pass the index value of the pirate in question to the method:
     <li>{details.name}</li>
     <li>{details.weapon}</li>
     <li>{details.vessel}</li>
-    <li><button onClick={() => this.props.removePirate(this.props.index)}>X</button></li>
+    <li><button onClick={() => this.props.removePirate(this.props.index)}>✖︎</button></li>
   </ul>
 ```
 
@@ -1683,224 +1700,231 @@ But aren't we already passing along a key? Why do we need an index?
 Try this is `Pirate.js`:
 
 ```js
-<li><button onClick={() => this.props.removePirate(this.props.key)}>X</button></li>
+<li><button onClick={() => this.props.removePirate(this.props.key)}>✖︎</button></li>
 ```
 
-and note the error message.
-<!-- 
-### Persisting the Data
+Note the error message. The key prop has a special meaning in React. It it is not passed to the component as prop but is used by React to aid the reconciliation of collections.
 
-1. Create an account at [Firebase](https://firebase.com/)
-1. Create a new project called `<firstname>-<lastname>-pirates`
-1. Create Project
-1. Go to the empty database (left hand menu)
+## Persisting the Data
 
-Click on Rules at the top.
+`cd` to the top level of today's repo.
 
-Change this:
-
-```js
-{
-  "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
-  }
-}
+```sh
+$ mkdir express-pirates
+$ cd express-pirates
+$ npx express-generator --no-view
+$ npm i
+$ npm i -S nodemon mongoose
 ```
 
-To this:
+<!-- Maybe use CORS?
 
 ```js
-{
-  "rules": {
-    ".read": true,
-    ".write": true
-  }
-}
+const cors = require('cors');
+...
+app.use(cors());
+``` -->
+
+Create a dot gitignore, set the PORT to 3005, the npm script to use nodemon and edit `app.js` to:
+
+```js
+var express = require('express');
+var router = express.Router();
+
+var app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+module.exports = app;
 ```
 
-and click Publish.
-
-Examine `App.js` state. Any change to pirates needs to be made to firebase.
-
-## Rebase
-
-in src create `base.js`
+Create the pirate schema, a database on mLab and the mongoose connection string:
 
 ```js
-import Rebase from 're-base'
+var express = require('express');
+var router = express.Router();
+const mongoose = require('mongoose');
 
-const base = Rebase.createClass({
+const Schema = mongoose.Schema;
 
+const mongoUri = 'mongodb://devereld:dd2345@ds113746.mlab.com:13746/pirates';
+
+// schema
+const PirateSchema = new Schema({
+  name: String,
+  weapon: String,
+  vessel: String
+});
+
+const Recipe = mongoose.model('Pirate', PirateSchema);
+
+var app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// initialization
+mongoose.connect(mongoUri, { useNewUrlParser: true });
+
+module.exports = app;
+
+```
+
+Add a default route and test:
+
+```js
+app.get('/api/pirates', function(req, res){
+  Pirate.find({}, function(err, results) {
+    return res.send(results);
+  });
+});
+```
+
+
+
+```js
+var express = require('express');
+var router = express.Router();
+const mongoose = require('mongoose');
+
+const Schema = mongoose.Schema;
+
+const mongoUri = 'mongodb://devereld:dd2345@ds113746.mlab.com:13746/pirates';
+
+// schema
+const PirateSchema = new Schema({
+  name: String,
+  weapon: String,
+  vessel: String
+});
+
+const Recipe = mongoose.model('Pirate', PirateSchema);
+
+var app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header('Access-Control-Allow-Methods', "GET,PUT,POST,DELETE")
+  next()
 })
 
-export default base;
+app.get('/api/pirates', function(req, res){
+  Recipe.find({}, function(err, results) {
+    return res.send(results);
+  });
+});
+
+// initialization
+mongoose.connect(mongoUri, { useNewUrlParser: true });
+
+module.exports = app;
+
 ```
 
-[Rebase](https://www.npmjs.com/package/rebase) is a simple utility that we are going to need to massage strings.
-
-In a new terminal cd into `react-pirates` and run:
-
-`$ npm install re-base@2.2.0 --save`
-
-### Add domain, database URL, API key.
-
-In Firebase click on `Overview > Add Firebase to your webapp`
-
-We only need:
+`App.js`:
 
 ```js
-apiKey: "xxx",
-authDomain: "xxx",
-databaseURL: "xxx",
-```
-
-Edit `base.js` with the information, e.g. (DO NOT COPY THE THREE SETTING - USE YOUR OWN):
-
-```js
-import Rebase from 're-base'
-
-const base = Rebase.createClass({
-  apiKey: "AIzaSyAHnKw63CUBAqSuCREgils_waYJ0qwpGiU",
-  authDomain: "daniel-deverell-pirates.firebaseapp.com",
-  databaseURL: "https://daniel-deverell-pirates.firebaseio.com",
-})
-
-export default base
-```
-
-Import into `App.js`:
-
-`import base from './base'`
-
-## React Component Lifecycle
-
-[Documentation](https://reactjs.org/docs/react-component.html).
-
-* component will mount - hooks into component before it is displayed.
-
-* `App.js`:
-
-```js
-componentWillMount(){
-  this.ref = base.syncState(`< first name >-<last name>-pirates/pirates`, {
-    context: this,
-    state: 'pirates'
-  })
-}
-```
-
-_Note - fill in the first and last name fields._
-
-And for good measure, remove the binding when the component is unmounted:
-
-```js
-componentWillUmount(){
-  base.removeBinding(this.ref)
-}
-```
-
-Load pirates and examine the Firebase HTML5 websockets.
-
-To delete a pirate we need to accomodate Firebase.
-
-* `App.js`:
-
-```js
-removePirate(key){
-  const pirates = {...this.state.pirates}
-  pirates[key] = null
-  this.setState({pirates})
-}
-```
-
-## summer2018 Stop here
-
-Move on to [session 12](https://github.com/front-end-intermediate/session-12#bi-directional-data)
-
-Pirate.js
-
-```js
-const myColor = '#C90813'
-
-const myStyle={
-  color: myColor
-}
-```
-
-Examine Code. Commit and push to github.
-
-### Routing
-
-[Quick start](https://reacttraining.com/react-router/web/guides/quick-start)
-
-`npm install react-router-dom --save`
-
-* `index.js`:
-
-```js
-import {
-  BrowserRouter as Router,
-  Route
-} from 'react-router-dom'
-
-class Main extends React.Component {
-  render() {
-    return (
-    <Router>
-    <div>
-      <Route exact path="/" component={App}/>
-    </div>
-  </Router>
-      )
+    this.state = {
+      pirates: {},
+      // data: null
+    }
   }
-}
 
-ReactDOM.render(
-  <Main />,
-  document.getElementById('root')
-  );
+  componentWillMount(){
+    fetch('http://localhost:3005/api/pirates')
+    .then(response => response.json())
+    .then(pirates => this.setState({pirates}))
+  }
 ```
 
-### Pirate Detail
-
-Use Header.js as a template
+## Loading
 
 ```js
-import React, { Component } from 'react'
-
-class PirateDetail extends Component {
-  render() {
-    return (
-      <div className="pirate-detail">
-        <h1>Pirate detail</h1>
-      </div>
-      )
+    this.state = {
+      pirates: {},
+      isLoading: false
+    }
   }
-}
 
-export default PirateDetail;
+  componentDidMount(){
+    this.setState({ isLoading: true });
+    fetch('http://localhost:3005/api/pirates')
+    .then(response => response.json())
+    .then(pirates => this.setState({pirates, isLoading: false}))
+  }
+  
+  render() {
+    // console.log(this.state.data)
+    const { pirates, isLoading } = this.state;
+
+    if (isLoading) {
+      return <p>Loading ...</p>;
+    }
 ```
 
-`<Route path="/pirate/:pid" component={PirateDetail} />`:
+Chrome dev tools > network > Online > Slow 3G
+
+## Error Handling
 
 ```js
-import PirateDetail from './PirateDetail';
-
-class Main extends React.Component {
-  render() {
-    return (
-    <Router>
-    <div>
-      <Route exact path="/" component={App}/>
-      <Route path="/pirate/:pid" component={PirateDetail} />
-    </div>
-  </Router>
-      )
+    this.state = {
+      pirates: {},
+      isLoading: false,
+      error: null
+    }
   }
-}
+
+  componentDidMount(){
+    this.setState({ isLoading: true });
+    fetch('http://localhost:3005/api/pirates')
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Something went wrong ...');
+      }
+    })
+    // .then(response => response.json())
+    .then(pirates => this.setState({pirates, isLoading: false}))
+    .catch(error => this.setState({ error, isLoading: false }));
+  }
+  
+  render() {
+    // console.log(this.state.data)
+    const { isLoading, error } = this.state;
+
+    if (error) {
+      return <p>{error.message}</p>;
+    }
+
+    if (isLoading) {
+      return <p>Loading ...</p>;
+    }
 ```
 
-We probably want the routing to occur in `App.js` to keep the header and replace `<Pirate />` and `<PirateForm />` -->
+## Axios
+
+You can substitute the native fetch API with another library. For instance, another library might run for every erroneous requests into the catch block on its own without you having to throw an error in the first place. A great candidate as a library for fetching data is axios. 
+
+Install axios in your project with `npm install axios -S` and use it instead of the native fetch API in your project. Let’s refactor using axios instead of the fetch API.
+
+```js
+import axios from 'axios';
+
+  componentDidMount(){
+    this.setState({ isLoading: true });
+    axios.get('http://localhost:3005/api/pirates')
+    .then(response => this.setState({
+      pirates: response.data,
+      isLoading: false
+    }))
+    .catch(error => this.setState({
+      error,
+      isLoading: false
+    }));
+  }
+```
 
 ## Notes
