@@ -507,15 +507,14 @@ Bind the add form to our app in `App.js`:
   }
 ```
 
-React does not implicitly bind the methods to the component itself - you need to bind them. Inside the constructor `this` is bound to the app component.
+The binding step is necessary because class methods don’t automatically bind `this` to the class instance. 
+
+In other words, React does not implicitly bind the methods to the component itself - you need to bind them. Inside the constructor `this` is bound to the app component.
 
 ### Review
 
-Super extends the app component.
-
-Review `super` in classes: `reference / extending-classes.html`
-
-Note - `bind()` - creates a new function that, when called, has its `this` keyword set to the provided value.
+* `super()` extends the app component. (see `super` in classes: `reference / extending-classes.html`)
+* `bind()` - creates a new function that, when called, has its `this` keyword set to the provided value
 
 See: `reference / bind / index.html` and `reference / bind / button.html`
 
@@ -1288,6 +1287,8 @@ app.get('/api/import', (req, res) => {
     .then(pirates => this.setState({pirates}))
   }
 ```
+
+For more information on component lifecycles in Ract be sure to read [Lifecycle Methods](https://reactjs.org/docs/state-and-lifecycle.html#adding-lifecycle-methods-to-a-class).
 
 Note the error in the console. Add cors headers:
 
