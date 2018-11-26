@@ -21,15 +21,30 @@ const PirateSchema = new Schema({
 
 const Pirate = mongoose.model('Pirate', PirateSchema);
 
-app.get('/', function(req, res){
-  return res.send('hello');
-});
+// app.get('/', function(req, res){
+//   return res.send('hello');
+// });
 
 app.get('/api/pirates', function(req, res){
   Pirate.find({}, function(err, results) {
     return res.send(results);
   });
 });
+
+app.get('/api/pirates/:id', function(req, res){
+  let id = req.params.id;
+  Pirate.deleteOne({ _id: id}, result => {
+    return res.sendStatus(200)
+  })
+})
+
+app.post('/api/pirates', function(req, res){
+  Pirate.create(req.body, (err, pirate) => {
+    console.log(pirate)
+    if (err) return console.log(err);
+    return res.send(pirate)
+  })
+})
 
 app.get('/api/import', (req, res) => {
   Pirate.create(
