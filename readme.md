@@ -12,6 +12,7 @@ Of course, if you wish you can do something entirely original. Just propose it.
 
 * [Rendering elements](https://reactjs.org/docs/rendering-elements.html) in React
 * [State and Lifecycle](https://reactjs.org/docs/state-and-lifecycle.html) in React
+* [Lists amd Keys](https://reactjs.org/docs/lists-and-keys.html) in React
 
 <!-- * THIS IS GOOD STUFF - SEE THE BEGINNING BOOK TOO `http://exploringjs.com/es6/` (specifically `http://exploringjs.com/es6/ch_core-features.html#sec_from-constr-to-class` and `http://exploringjs.com/es6/ch_classes.html#ch_classes`) -->
 
