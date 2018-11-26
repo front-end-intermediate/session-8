@@ -8,6 +8,8 @@
 # testing
 /coverage
 
+/express-pirates
+
 # production
 /build
 
