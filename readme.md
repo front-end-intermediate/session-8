@@ -10,10 +10,8 @@ Of course, if you wish you can do something entirely original. Just propose it.
 
 ## Reading
 
-It is important to get some hands on with 'primitive' (i.e. outside the Create React App setup) React coding.
-
-* Spend some quality time with the exercises on [Built with React](http://buildwithreact.com) (do the simple Tutorial).
-* Another useful tutorial you could try is the official [Intro to React](https://reactjs.org/tutorial/tutorial.html) tutorial.
+* [Rendering elements](https://reactjs.org/docs/rendering-elements.html) in React
+* [State and Lifecycle](https://reactjs.org/docs/state-and-lifecycle.html) in React
 
 <!-- * THIS IS GOOD STUFF - SEE THE BEGINNING BOOK TOO `http://exploringjs.com/es6/` (specifically `http://exploringjs.com/es6/ch_core-features.html#sec_from-constr-to-class` and `http://exploringjs.com/es6/ch_classes.html#ch_classes`) -->
 
@@ -561,6 +559,16 @@ Unlike the `createPirate` function, it stores the new pirate in `state`. Test wi
 ```js
 <h3>{this.props.tagline}</h3>
 ```
+
+Since `Header.js` is not a class component there is no `this`:
+
+`App.js`:
+
+`<Header tagline="Pirates"/>`
+
+`Header.js`:
+
+`<h1>{props.tagline}</h1>`
 
 ### Passing a Function via props
 
