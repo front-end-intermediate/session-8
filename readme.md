@@ -570,6 +570,16 @@ Since `Header.js` is not a class component there is no `this`:
 
 `<h1>{props.tagline}</h1>`
 
+Hot module replacement (see the first 10 minutes of [this presentation](https://www.youtube.com/watch?v=xsSnOQynTHs)).
+
+`index.js`:
+
+```js
+if (module.hot) {
+  module.hot.accept();
+}
+```
+
 ### Passing a Function via props
 
 We need to make the `addPirate` function available to the `AddPirateForm` by passing it using props:
@@ -640,9 +650,9 @@ We should now be able to create a pirate using the form and see it in the React 
 
 We have refs on the input fields. When we click "Add Pirate" the form still holds the data so we need to reset it.
 
-Empty the form by assigning a [ref](https://facebook.github.io/react/docs/refs-and-the-dom.html#adding-a-ref-to-a-class-component) to the input fields.
+Empty the form by assigning a [ref](https://facebook.github.io/react/docs/refs-and-the-dom.html#adding-a-ref-to-a-class-component) to the form itself.
 
-* `AddPirateFrom`
+* In `AddPirateForm`
 
 `<form ref={ (input)=>this.pirateForm = input } onSubmit={(e) => this.createPirate(e)}>`:
 
@@ -683,27 +693,27 @@ We can add pirates to state but cannot see them in the UI. Let's create an unord
 * `Pirate.js`:
 
 ```js
-    return (
-      <div className='pirate'>
-        <ul>
-          <li></li>
-        </ul>
-      </div>
-      )
+return (
+  <div className='pirate'>
+    <ul>
+      <li></li>
+    </ul>
+  </div>
+  )
 ```
 
 ## Review .map with Sample Pirates
 
 We will use a JSON Array in `Pirate.js` and [JSON stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) to get a quick look at some pirates.
 
-Examine the sample files in the `data` folder. Ensure that the data folder is inside `src`.
+Examine the `sample-pirates-array` file in the `data` folder. (Ensure that the data folder is inside `src`.)
 
 * `Pirate.js`:
 
 ```js
-import piratesFile from '../data/sample-pirates-array';`:
+import piratesFile from '../data/sample-pirates-array';
 ...
-<pre><code>{ JSON.stringify(piratesFile, null, 4)}</code></pre>
+<li><pre><code>{ JSON.stringify(piratesFile, null, 4)}</code></pre></li>
 ```
 
 `JSON.stringify(<data-that-you-want-to-stringify>,<replacer-function-null>,<indentation>)`
@@ -757,6 +767,8 @@ Review Example - Doubling numbers:
 </ul>
 ```
 
+Note the console error. We'll return to this in a bit.
+
 Review over, rollback the Pirate component to its original state:
 
 * `Pirate`:
@@ -780,9 +792,7 @@ export default Pirate;
 
 ### Object.keys()
 
-We cannot directly use `.map` which is a method on the Array prototype - not the Object prototype.
-
-Use `Object.keys()` (a private method on the Object) instead. See the [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys) article on Object keys.
+We cannot directly use `.map` (which is a method on the Array prototype) on an Object. You just use `Object.keys()` (a private method on the Object) instead. See the [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys) article on Object keys.
 
 ```js
 > var arr = [1,2,3]
@@ -889,7 +899,7 @@ We will import the data into `App.js` as an object. Switch the array out for the
 `App.js`:
 
 ```js
-import piratesFile from './data/sample-pirates-object';
+import piratesFile from './data/sample-pirates-object'
 ```
 
 Create a new method in `App.js`:
@@ -917,7 +927,7 @@ Bind it in the constructor:
 
 We will use a button in `PirateForm`:
 
-`<button onClick={this.props.loadSamples}>Load Sample Pirates</button>`:
+`<button onClick={this.props.loadSamples}>Load Sample Pirates</button>`
 
 ```js
 render() {
@@ -1037,13 +1047,13 @@ return (
   )
 ```
 
-We have temorarily hard coded the button to remove just one pirate from the list.
+We have _temporarily_ hard coded the button to remove just one pirate from the list.
 
 Load pirates and examine the state in App.
 
 Pass it along as part of the Pirate component `index={key}` in App.
 
-* `App.js`:
+* Add `index={key}` to `App.js`:
 
 ```js
 {
@@ -1493,3 +1503,9 @@ app.post('/api/pirates', function(req, res){
 ```
 
 ## Notes
+
+```js
+if (module.hot) {
+  module.hot.accept();
+}
+```
