@@ -18,9 +18,9 @@
 	}
 
 	const myButton = document.querySelector('button')
-	myButton.addEventListener('click', dog.talk)
+	// myButton.addEventListener('click', dog.talk)
 		// above 'this' will not be the dog
-		// myButton.addEventListener('click', dog.talk.bind(dog))
+		myButton.addEventListener('click', dog.talk.bind(dog))
 
 	</script>
 </body>
