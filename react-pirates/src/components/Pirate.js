@@ -10,9 +10,11 @@ class Pirate extends Component {
       <li>{details.name}</li>
       <li>{details.weapon}</li>
       <li>{details.vessel}</li>
-      </ul>
+      <li><button onClick={() => this.props.removePirate(this.props.index)}>✖︎</button></li>
+      {/* <li><button onClick={() => this.props.removePirate(this.props.key)}>✖︎</button></li> */}
+        </ul>
       </div>
       )
+    }
   }
-}
-export default Pirate;
+  export default Pirate;

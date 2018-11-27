@@ -10,22 +10,40 @@ class App extends Component {
     super();
     this.addPirate = this.addPirate.bind(this);
     this.loadSamples = this.loadSamples.bind(this);
+    this.removePirate = this.removePirate.bind(this);
     this.state = {
-      pirates: {}
+      pirates: {},
+      isLoading: true
     }
   }
 
+  componentDidMount(){
+    this.setState({ isLoading: true });
+    fetch('http://localhost:3005/api/pirates')
+    .then(response => response.json())
+    .then(pirates => this.setState({pirates, isLoading: false}))
+  }
+
   render() {
+
+    const { isLoading } = this.state;
+
+    if (isLoading) {
+      return <p>Loading ...</p>;
+    }
+    
     return (
       <div className="App">
         <Header headline="Pirates!" />
         
-        <ul>
           {
             Object.keys(this.state.pirates)
-              .map(key => <Pirate key={key} details={this.state.pirates[key]} />)
+            .map(key =>
+              <Pirate key={key}
+                index={key}
+                details={this.state.pirates[key]}
+                removePirate={this.removePirate} />)
           }
-        </ul>
 
         <PirateForm loadSamples={this.loadSamples} addPirate={this.addPirate} />
       </div>
@@ -36,6 +54,12 @@ class App extends Component {
     this.setState({
       pirates: piratesFile
     })
+  }
+
+  removePirate(key){
+    const pirates = {...this.state.pirates}
+    delete pirates[key]
+    this.setState({pirates})
   }
 
   addPirate(pirate) {
